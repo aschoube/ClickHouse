@@ -100,12 +100,14 @@ public:
 
     uint64_t last_commit_index() override { return keeper_context->lastCommittedIndex(); }
 
-    /// A negative hint makes the leader fall back to heartbeats instead of resending entries as
-    /// fast as they are refused. Entries are refused while the local logs are not preprocessed,
-    /// but only ask the leader to pause once the node knows it can finish the replay on its own:
-    /// if its local tail diverges from the leader's, it still needs those requests to find out
-    /// where the two logs match.
+    /// Entries are refused while the local logs are not preprocessed, but only ask the leader to
+    /// pause once the node knows it can finish the replay on its own: if its local tail diverges
+    /// from the leader's, it still needs those requests to find out where the two logs match.
     void setPauseAppendingEntries(bool pause) { pause_appending_entries = pause; }
+
+    /// A negative hint makes the leader fall back to heartbeats instead of resending entries as
+    /// fast as they are refused. NuRaft's default implementation returns 0, which means any
+    /// batch size is welcome.
     int64_t get_next_batch_size_hint_in_bytes() override
     {
         return pause_appending_entries && !keeper_context->localLogsPreprocessed() ? -1 : 0;
