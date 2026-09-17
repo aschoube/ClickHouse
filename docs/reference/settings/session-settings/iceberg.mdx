@@ -54,13 +54,16 @@ Must be greater than zero; `1` decodes the manifests one at a time.
 
 <ExperimentalBadge/>
 
-<SettingsInfoBlock type="UInt64" default_value="30" />
+<SettingsInfoBlock type="UInt64" default_value="100" />
 
-<VersionHistory rows={[{"id": "row-1","items": [{"label": "26.7"},{"label": "30"},{"label": "New setting to control manifest compaction for Iceberg tables."}]}]}/>
+<VersionHistory rows={[{"id": "row-1","items": [{"label": "26.9"},{"label": "100"},{"label": "Aligned with the documented default of the Iceberg table property `commit.manifest.min-count-to-merge` (100), see https:\/\/iceberg.apache.org\/docs\/1.5.2\/configuration\/."}]}, {"id": "row-2","items": [{"label": "26.7"},{"label": "30"},{"label": "New setting to control manifest compaction for Iceberg tables."}]}]}/>
 
 Minimum number of manifest files required to trigger manifest-only compaction via OPTIMIZE TABLE ... MANIFEST.
 If the current number of manifest files is less than or equal to this threshold, compaction is skipped.
 Requires allow_experimental_iceberg_compaction to be enabled.
+
+The default mirrors the documented default of the Iceberg table property `commit.manifest.min-count-to-merge` (100),
+see https://iceberg.apache.org/docs/1.5.2/configuration/.
 
 ## iceberg_max_number_datafiles_to_compact {#iceberg_max_number_datafiles_to_compact}
 
