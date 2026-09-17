@@ -253,9 +253,10 @@ SET dialect = 'clickhouse_json';
 
 Enables lazy type hints for the [JSON](/reference/data-types/newjson) type.
 
-With this setting enabled, `ALTER TABLE ... MODIFY COLUMN json JSON(path TypeName)` that only adds or changes
-type hints is a metadata-only operation: the type hints are applied at query time for existing parts and
-materialized during inserts and background merges instead of rewriting the historical data.
+With this setting enabled, `ALTER TABLE ... MODIFY COLUMN json JSON(path TypeName)` that adds or changes type hints
+is a metadata-only operation when the affected paths are not used in a sorting or partition key, data skipping index,
+or projection sort key. The type hints are applied at query time for existing parts and materialized during inserts and
+background merges instead of rewriting the historical data. Changes to type hints used by these structures are rejected.
 
 ## enable_lazy_columns_replication {#enable_lazy_columns_replication}
 

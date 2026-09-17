@@ -8930,9 +8930,10 @@ Control the minimum number of payload columns from the left side required for en
     DECLARE_WITH_ALIAS(Bool, enable_json_lazy_type_hints, false, R"(
 Enables lazy type hints for the [JSON](/reference/data-types/newjson) type.
 
-With this setting enabled, `ALTER TABLE ... MODIFY COLUMN json JSON(path TypeName)` that only adds or changes
-type hints is a metadata-only operation: the type hints are applied at query time for existing parts and
-materialized during inserts and background merges instead of rewriting the historical data.
+With this setting enabled, `ALTER TABLE ... MODIFY COLUMN json JSON(path TypeName)` that adds or changes type hints
+is a metadata-only operation when the affected paths are not used in a sorting or partition key, data skipping index,
+or projection sort key. The type hints are applied at query time for existing parts and materialized during inserts and
+background merges instead of rewriting the historical data. Changes to type hints used by these structures are rejected.
 )", BETA, allow_experimental_json_lazy_type_hints) \
     DECLARE(Bool, enable_hash_join_row_store, true, R"(
 Enable transforming the payload of a hash join into a row-major layout.
